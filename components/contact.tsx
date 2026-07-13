@@ -39,8 +39,9 @@ export default function Contact() {
         body: JSON.stringify(formData),
       })
 
+      const result = await response.json().catch(() => ({}))
       if (!response.ok) {
-        throw new Error('Failed to send message')
+        throw new Error(result.error || 'Failed to send message')
       }
       
       setNotification({
@@ -52,7 +53,10 @@ export default function Contact() {
       console.error(error)
       setNotification({
         type: 'error',
-        message: 'Failed to send message. Please try again.'
+        message:
+          error instanceof Error
+            ? error.message
+            : 'Failed to send message. Please try again or email Mohamed.shelan@insel.ch / Constantinos.Zamboglou@goc.com.cy.',
       })
     } finally {
       setIsLoading(false)

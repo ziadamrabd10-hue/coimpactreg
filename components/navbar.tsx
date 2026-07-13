@@ -10,6 +10,7 @@ const navigation = [
   { name: 'Expert Network', href: '/expert-network' },
   { name: 'Publications', href: '/publications' },
   { name: 'Guidelines', href: '/guidelines' },
+  { name: 'Analysis Request', href: '/analysis-request' },
   { name: 'Meetings', href: '/meetings' },
   { name: 'Sites', href: '/coimpact/sites' },
 ]
