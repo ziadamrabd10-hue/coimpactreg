@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import nodemailer from 'nodemailer'
+import nodemailer, { type SendMailOptions } from 'nodemailer'
 
 interface Contact {
   name: string
@@ -76,7 +76,7 @@ export async function POST(req: Request) {
       },
     })
 
-    let mailOptions
+    let mailOptions: SendMailOptions
 
     if (formType === 'registry') {
       const { formData } = data as { formData: RegistryFormData }
