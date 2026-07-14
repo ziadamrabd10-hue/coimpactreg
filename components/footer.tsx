@@ -29,6 +29,7 @@ export default function Footer() {
                 ['Expert Network', '/expert-network'],
                 ['Publications', '/publications'],
                 ['Guidelines', '/guidelines'],
+                ['Downloads', '/downloads'],
                 ['Analysis Request', '/analysis-request'],
               ].map(([name, href]) => (
                 <li key={name}>
