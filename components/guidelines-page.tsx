@@ -83,7 +83,7 @@ export default function GuidelinesPage() {
             CO-IMPACT Guidelines &amp; Documents
           </h1>
           <p className="mt-4 text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
-            Official consortium documents for download. Read the full SOP online on the Downloads page.
+            Official consortium documents for download.
           </p>
         </div>
       </section>
@@ -135,16 +135,6 @@ export default function GuidelinesPage() {
               </div>
             )
           })}
-        </div>
-
-        <div className="mt-8 text-center">
-          <Link
-            href="/downloads"
-            className="inline-flex items-center gap-2 rounded-lg border-2 border-[#1a365d] px-5 py-2.5 text-sm font-medium text-[#1a365d] hover:bg-[#1a365d] hover:text-white transition-colors"
-          >
-            <FileText className="h-4 w-4" />
-            Read SOP v2 online
-          </Link>
         </div>
 
         <p className="mt-6 text-sm text-gray-500 text-center max-w-3xl mx-auto">
