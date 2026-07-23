@@ -90,6 +90,7 @@ export default function Contact() {
                   <Input 
                     id="name" 
                     name="name" 
+                    autoComplete="name"
                     placeholder="Enter your name" 
                     required 
                     className="h-11 px-4 transition-colors focus:border-blue-500"
@@ -100,6 +101,7 @@ export default function Contact() {
                   <Input 
                     id="email" 
                     name="email" 
+                    autoComplete="email"
                     placeholder="Enter your email" 
                     type="email" 
                     required 
@@ -111,6 +113,7 @@ export default function Contact() {
                   <Input 
                     id="institution" 
                     name="institution" 
+                    autoComplete="organization"
                     placeholder="Enter your institution" 
                     required 
                     className="h-11 px-4 transition-colors focus:border-blue-500"

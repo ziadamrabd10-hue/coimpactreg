@@ -47,6 +47,13 @@ function row(label: string, value: unknown) {
   )}</p>`
 }
 
+function tableRow(label: string, value: unknown) {
+  return `<tr>
+    <td style="padding: 12px 16px; border: 1px solid #e5e7eb; background-color: #f9fafb; font-weight: 600; color: #374151; width: 180px; vertical-align: top;">${escapeHtml(label)}</td>
+    <td style="padding: 12px 16px; border: 1px solid #e5e7eb; color: #111827; white-space: pre-wrap;">${escapeHtml(value)}</td>
+  </tr>`
+}
+
 export async function POST(req: Request) {
   try {
     const gmailUser = process.env.GMAIL_USER
@@ -229,30 +236,44 @@ export async function POST(req: Request) {
         )
       }
 
+      const submittedAt = new Date().toUTCString()
+
       mailOptions = {
         from: gmailUser,
         to: process.env.CONTACT_RECIPIENTS || DEFAULT_RECIPIENTS,
         replyTo: email,
-        subject: `New Contact Form Submission from ${name}`,
+        subject: `Co-IMPACT Contact Form — ${name}`,
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #f9f9f9;">
             <div style="background-color: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-              <h2 style="color: #2563eb; margin-bottom: 25px; text-align: center; border-bottom: 2px solid #e5e7eb; padding-bottom: 15px;">New Contact Form Submission</h2>
-              
-              <div style="background-color: #f3f4f6; padding: 20px; border-radius: 6px; margin-bottom: 20px;">
-                ${row('Name', name)}
-                ${row('Email', email)}
-                ${row('Institution', institution)}
-              </div>
-              
-              <div style="background-color: #f3f4f6; padding: 20px; border-radius: 6px;">
-                <h3 style="color: #2563eb; margin-bottom: 15px;">Message</h3>
-                <p style="margin: 0; line-height: 1.6; white-space: pre-wrap;">${escapeHtml(message)}</p>
-              </div>
+              <h2 style="color: #1a365d; margin: 0 0 8px 0; text-align: center;">Co-IMPACT Website — Contact Form</h2>
+              <p style="text-align: center; color: #6b7280; font-size: 14px; margin: 0 0 24px 0; padding-bottom: 20px; border-bottom: 2px solid #e5e7eb;">
+                Submitted via the homepage contact form · ${escapeHtml(submittedAt)}
+              </p>
+
+              <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
+                <thead>
+                  <tr>
+                    <th colspan="2" style="padding: 12px 16px; background-color: #1a365d; color: #ffffff; text-align: left; font-size: 15px;">
+                      Contact Form Submission
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${tableRow('Name', name)}
+                  ${tableRow('Email', email)}
+                  ${tableRow('Institution', institution || 'Not provided')}
+                  ${tableRow('Message', message)}
+                </tbody>
+              </table>
+
+              <p style="margin: 0; padding: 16px; background-color: #eff6ff; border-radius: 6px; color: #1e40af; font-size: 14px; line-height: 1.5;">
+                <strong>How to reply:</strong> Click <em>Reply</em> in your email client to respond directly to ${escapeHtml(email)}.
+              </p>
             </div>
             
             <div style="text-align: center; margin-top: 20px; color: #6b7280; font-size: 14px;">
-              <p>This is an automated email from the Co-IMPACT Registry System</p>
+              <p>Automated email from the Co-IMPACT Registry website</p>
             </div>
           </div>
         `,
