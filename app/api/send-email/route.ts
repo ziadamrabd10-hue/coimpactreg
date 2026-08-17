@@ -1,5 +1,14 @@
 import { NextResponse } from 'next/server'
 import nodemailer, { type SendMailOptions } from 'nodemailer'
+import {
+  validateAnalysisRequest,
+  validateContactSubmission,
+  validateRegistrySubmission,
+} from '@/lib/form-spam'
+
+function blockedResponse() {
+  return NextResponse.json({ message: 'Email sent successfully' }, { status: 200 })
+}
 
 interface Contact {
   name: string
@@ -86,6 +95,11 @@ export async function POST(req: Request) {
     let mailOptions: SendMailOptions
 
     if (formType === 'registry') {
+      if (!validateRegistrySubmission(data)) {
+        console.warn('Blocked registry submission (anti-spam)')
+        return blockedResponse()
+      }
+
       const { formData } = data as { formData: RegistryFormData }
       mailOptions = {
         from: gmailUser,
@@ -160,6 +174,11 @@ export async function POST(req: Request) {
         `,
       }
     } else if (formType === 'analysis-request') {
+      if (!validateAnalysisRequest(data)) {
+        console.warn('Blocked analysis request (anti-spam)')
+        return blockedResponse()
+      }
+
       mailOptions = {
         from: gmailUser,
         to:
@@ -227,14 +246,12 @@ export async function POST(req: Request) {
         `,
       }
     } else {
-      const { name, email, institution, message } = data
-
-      if (!name || !email || !message) {
-        return NextResponse.json(
-          { error: 'Name, email, and message are required.' },
-          { status: 400 }
-        )
+      if (!validateContactSubmission(data)) {
+        console.warn('Blocked contact submission (anti-spam)')
+        return blockedResponse()
       }
+
+      const { name, email, institution, message } = data
 
       const submittedAt = new Date().toUTCString()
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import {
   Card,
   CardContent,
@@ -16,6 +16,11 @@ import { Button } from "@/components/ui/button"
 export default function Contact() {
   const [isLoading, setIsLoading] = useState(false)
   const [notification, setNotification] = useState<{ type: 'success' | 'error', message: string } | null>(null)
+  const formLoadedAt = useRef(Date.now())
+
+  useEffect(() => {
+    formLoadedAt.current = Date.now()
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -28,6 +33,8 @@ export default function Contact() {
       email: (form.elements.namedItem('email') as HTMLInputElement).value,
       institution: (form.elements.namedItem('institution') as HTMLInputElement).value,
       message: (form.elements.namedItem('message') as HTMLTextAreaElement).value,
+      website: (form.elements.namedItem('website') as HTMLInputElement).value,
+      formLoadedAt: formLoadedAt.current,
     }
 
     try {
@@ -84,6 +91,14 @@ export default function Contact() {
               </div>
             )}
             <form onSubmit={handleSubmit} className="space-y-6">
+              <input
+                type="text"
+                name="website"
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                className="absolute opacity-0 pointer-events-none h-0 w-0"
+              />
               <div className="grid gap-6">
                 <div className="grid gap-2">
                   <Label htmlFor="name" className="text-sm font-medium text-gray-700">Name</Label>
