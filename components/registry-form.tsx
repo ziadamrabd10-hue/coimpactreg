@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import {
   Card,
   CardContent,
@@ -36,6 +36,12 @@ export default function RegistryForm() {
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [website, setWebsite] = useState('')
+  const formLoadedAt = useRef(Date.now())
+
+  useEffect(() => {
+    formLoadedAt.current = Date.now()
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -50,7 +56,9 @@ export default function RegistryForm() {
         },
         body: JSON.stringify({
           formType: 'registry',
-          formData
+          formData,
+          website,
+          formLoadedAt: formLoadedAt.current,
         }),
       })
 
@@ -78,6 +86,16 @@ export default function RegistryForm() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-8">
+            <input
+              type="text"
+              name="website"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              value={website}
+              onChange={(e) => setWebsite(e.target.value)}
+              className="absolute opacity-0 pointer-events-none h-0 w-0"
+            />
             <div className="space-y-4">
               <div>
                 <Label htmlFor="date">Date</Label>

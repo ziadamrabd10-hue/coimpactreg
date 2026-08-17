@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Download, Mail } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -28,6 +28,11 @@ export default function AnalysisRequestForm() {
     type: 'success' | 'error'
     message: string
   } | null>(null)
+  const formLoadedAt = useRef(Date.now())
+
+  useEffect(() => {
+    formLoadedAt.current = Date.now()
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -67,6 +72,8 @@ export default function AnalysisRequestForm() {
       overlapDetails: String(fd.get('overlapDetails') || ''),
       conflict: String(fd.get('conflict') || ''),
       conflictDetails: String(fd.get('conflictDetails') || ''),
+      website: String(fd.get('website') || ''),
+      formLoadedAt: formLoadedAt.current,
     }
 
     try {
@@ -142,6 +149,14 @@ export default function AnalysisRequestForm() {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-8">
+        <input
+          type="text"
+          name="website"
+          tabIndex={-1}
+          autoComplete="off"
+          aria-hidden="true"
+          className="absolute opacity-0 pointer-events-none h-0 w-0"
+        />
         <fieldset className="space-y-4">
           <legend className="text-lg font-semibold text-gray-900">Section A — Applicant Details</legend>
           <div className="grid gap-4 sm:grid-cols-2">
